@@ -7,11 +7,6 @@ from the internet and wrangle the data then produce webmaps in html
 # the covid-19 data provided by johns-hopkins-university 
 # https://github.com/CSSEGISandData/COVID-19.git  
 
-# for the world population
-# https://worldpopulationreview.com/countries
-
-# for the shapefile 
-# https://drive.google.com/drive/folders/16Y3vUcsbv8trPQ4WnbA-5sf4o0iAdPyq?usp=sharing
 
 import os
 import wget
@@ -38,17 +33,6 @@ print('Hello \n'
       'This program is designed to take covid-19 data and a shapefile \n'
       'from the internet and wrangle the data then produce webmaps in html. \n')
 
-# these python libraries are extra and only for future improvements of the program
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# import altair as alt
-# import geojson
-# import json
-# import plotly.express as px
-# import plotly.graph_objs as go
-# from plotly.subplots import make_subplots
-# from plotly.offline import iplot,init_notebook_mode
-# init_notebook_mode()
 
 # path creation
 current_path = os.getcwd()
@@ -232,7 +216,7 @@ df = full_grouped.groupby(['Date', 'Country'])['Confirmed', 'Deaths', 'Recovered
                                                'New deaths'].sum().reset_index()
 
 # if the latitude and longitude file is not in ur drive the program will create one using osm
-if not os.path.isfile(data_path + r'\\countries.csv'):
+if not os.path.isfile(shapefile_path + r'\\countries.csv'):
     map_time = time.time()
     from geopy.geocoders import Nominatim
 
@@ -252,7 +236,7 @@ if not os.path.isfile(data_path + r'\\countries.csv'):
     df_country['Lat'] = lat
     df_country['Long'] = lon
     df_country = df_country[['Country', 'Lat', 'Long']]
-    df_country.to_csv(data_path + r'\\countries.csv')
+    df_country.to_csv(shapefile_path + r'\\countries.csv')
 
     end_time = time.time()
     total_time = end_time - map_time
@@ -265,7 +249,7 @@ df['New deaths'] = abs(df['New deaths'])
 df['New cases'] = abs(df['New cases'])
 
 # opening the latitude and longitude file for merging it with the Dataframe
-df_country = pd.read_csv(data_path + r'\\countries.csv')
+df_country = pd.read_csv(shapefile_path + r'\\countries.csv')
 df_country = df_country[['Country', 'Lat', 'Long']]
 print('The program read the latitude and longitude file.')
 
@@ -360,7 +344,6 @@ states_geom_gdf = gpd.GeoDataFrame(states_geom_df)
 states_geom_gdf = states_geom_gdf.drop_duplicates().reset_index()
 
 # creating the time slider map
-map_time = time.time()
 
 m = folium.Map(location=[20, 0], tiles="", min_zoom=2, zoom_start=2.5, max_zoom=8, max_bounds=True)
 tsm = folium.plugins.TimeSliderChoropleth(
