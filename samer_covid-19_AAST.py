@@ -339,15 +339,15 @@ for i in country_idx:
     style_dict[str(i)] = inner_dict
 
 # creating a Geopandas dataframe for plotting
-states_geom_df = gdf[['geometry']]
-states_geom_gdf = gpd.GeoDataFrame(states_geom_df)
-states_geom_gdf = states_geom_gdf.drop_duplicates().reset_index()
+c_df = gdf[['geometry']]
+c_gdf = gpd.GeoDataFrame(c_df)
+c_gdf = c_gdf.drop_duplicates().reset_index()
 
 # creating the time slider map
 
 m = folium.Map(location=[20, 0], tiles="", min_zoom=2, zoom_start=2.5, max_zoom=8, max_bounds=True)
 tsm = folium.plugins.TimeSliderChoropleth(
-    data=states_geom_gdf.to_json(),
+    data=c_gdf.to_json(),
     styledict=style_dict).add_to(m)
 
 tsm = cmap.add_to(m)
@@ -355,7 +355,7 @@ cmap.caption = "Number of New cases"
 ocean_tile.add_to(m)
 
 m.save(r'webmaps/TimeSlider New cases.html')
-c+=1
+c += 1
 end_time = time.time()
 total_time = end_time - map_time
 total_time = time.strftime("%M:%S", time.gmtime(total_time))
@@ -382,14 +382,14 @@ for i in country_idx:
     style_dict[str(i)] = inner_dict
 
 # creating a Geopandas dataframe for plotting
-states_geom_df = gdf[['geometry']]
-states_geom_gdf = gpd.GeoDataFrame(states_geom_df)
-states_geom_gdf = states_geom_gdf.drop_duplicates().reset_index()
+c_df = gdf[['geometry']]
+c_gdf = gpd.GeoDataFrame(c_df)
+c_gdf = c_gdf.drop_duplicates().reset_index()
 
 # creating the time slider map
 m = folium.Map(location=[20, 0], tiles="", min_zoom=2, zoom_start=2.5, max_zoom=8, max_bounds=True)
 tsm = folium.plugins.TimeSliderChoropleth(
-    data=states_geom_gdf.to_json(),
+    data=c_gdf.to_json(),
     styledict=style_dict).add_to(m)
 
 tsm = cmap.add_to(m)
